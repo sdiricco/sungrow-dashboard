@@ -13,6 +13,11 @@ export const useDataStore = defineStore("data", () => {
 
   const powerStationResponse = ref<PowerStationResponse | null>(null);
 
+  const powerStationDetail = ref<any>(null);
+
+  const deviceTypeResponse = ref<any>(null);
+
+
   /**
    * Fetches the list of power stations using the authenticated token.
    *
@@ -40,5 +45,57 @@ export const useDataStore = defineStore("data", () => {
       console.error(error);
     }
   }
-  return {powerStationResponse, getPowerStationList };
+
+
+  /**
+   * Fetches the list of devices for the given power station id.
+   *
+   * This function attempts to retrieve the list of devices for the given power station
+   * id by sending a request to the API endpoint. It requires a valid token to be
+   * present, otherwise it will throw an error indicating that the token is not found.
+   *
+   * @throws {Error} If the token is not found in the store.
+   * @param {string} ps_id - The id of the power station to retrieve the devices for.
+   */
+  async function getDeviceList(ps_id: string) {
+    try {
+      const token = getToken.value;
+      if (token === null) {
+        throw new Error("Token not found");
+      }
+      const r = await api.getDeviceList(token, ps_id);
+      deviceTypeResponse.value = r.data;
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  /**
+   * Fetches the detail of a power station given its serial number.
+   *
+   * This function attempts to retrieve the detail of a power station by sending a
+   * request to the API endpoint. It requires a valid token to be present,
+   * otherwise it will throw an error indicating that the token is not found.
+   *
+   * @throws {Error} If the token is not found in the store.
+   */
+  async function getPowerStationDetail(sn:string) {
+    try {
+      const token = getToken.value;
+      if (token === null) {
+        throw new Error("Token not found");
+      }
+      if(!sn){
+        throw new Error("Req serial number not found");
+      }
+      const r = await api.getPowerStationDetail(token, sn);
+      powerStationDetail.value = r.data;
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  return {powerStationResponse, deviceTypeResponse, powerStationDetail, getPowerStationList, getDeviceList, getPowerStationDetail };
+
+
 });
