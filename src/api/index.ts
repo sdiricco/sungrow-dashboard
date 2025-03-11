@@ -2,10 +2,10 @@ import api from './config';
 import {type LoginResponse,type PowerStationResponse} from './interfaces'
 import * as constants from '../constants'
 
-export async function login(){
+export async function login(username:string, password:string){
     return api.post<LoginResponse>('/login', {
-        "user_account": constants.USER_ACCOUNT,
-        "user_password": constants.USER_PASSWORD,
+        "user_account": username,
+        "user_password": password,
         "appkey": constants.APP_KEY
     })
 }
@@ -19,15 +19,6 @@ export async function getPowerStationList(token: string){
     })
 }
 
-export async function getPowerStationDetail(token: string, sn: string){
-    return api.post<any>('getPowerStationDetail', {
-        "appkey":constants.APP_KEY,
-        "token":token,
-        "sn":sn,
-        "is_get_ps_remarks": "1"
-    })
-}
-
 export async function getDeviceList(token:string, ps_id:string){
     return api.post<any>('getDeviceList', {
         "appkey":constants.APP_KEY,
@@ -37,3 +28,22 @@ export async function getDeviceList(token:string, ps_id:string){
         "ps_id":ps_id,
     })
 }
+
+export async function getPowerStationDetail(token: string, sn: string){
+    return api.post<any>('getPowerStationDetail', {
+        "appkey":constants.APP_KEY,
+        "token":token,
+        "sn":sn,
+        "is_get_ps_remarks": "1"
+    })
+}
+
+export async function getDeviceListByUser(token:string){
+    return api.post<any>('getDeviceListByUser', {
+        "appkey":constants.APP_KEY,
+        "token":token,
+        "curPage":"1",
+        "size":"100"
+    })
+}
+

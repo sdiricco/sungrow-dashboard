@@ -13,17 +13,28 @@ export const useAuthStore = defineStore("auth", () => {
 
   // Risposta della login
   const loginResponse = ref<LoginResponse | null>(null)
+  const loginErrorMessage = ref<string>('')
+
+  const username = ref<string>('');
+  const password = ref<string>('');
 
   //Login function
   async function login() {
     try {
-      const r = await api.login();
+      loginErrorMessage.value = '';
+      const r = await api.login(username.value, password.value);
+      if (r.data.result_data.login_state === "-1") {
+        loginErrorMessage.value = 'Wrong username or password';
+        return false;
+      }
       loginResponse.value = r.data;
-      token.value = loginResponse.value.result_data.token;
+      token.value = r.data.result_data.token;
+      return true;
     } catch (error) {
-        console.error(error);
+      loginErrorMessage.value = 'Error during login';
+      return false;
     }
   }
 
-  return { token, isAuthenticated, loginResponse, login };
+  return { token, loginErrorMessage, isAuthenticated, username, password, loginResponse, login };
 });

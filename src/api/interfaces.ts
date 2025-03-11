@@ -86,7 +86,7 @@ export type PowerStation = {
   share_type: string;
   ps_current_time_zone: string;
   today_income_update_time: string;
-  ps_id: number;
+  ps_id: string;
   grid_connection_time: string | null;
   connect_type: number;
   today_energy: {
