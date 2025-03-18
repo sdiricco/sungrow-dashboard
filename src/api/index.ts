@@ -1,5 +1,5 @@
 import api from './config';
-import {type LoginResponse,type PowerStationResponse} from './interfaces'
+import {type DeviceListByUserResponse, type LoginResponse,type PowerStationResponse} from './interfaces'
 import * as constants from '../constants'
 
 export async function login(username:string, password:string){
@@ -34,12 +34,11 @@ export async function getPowerStationDetail(token: string, sn: string){
         "appkey":constants.APP_KEY,
         "token":token,
         "sn":sn,
-        "is_get_ps_remarks": "1"
     })
 }
 
 export async function getDeviceListByUser(token:string){
-    return api.post<any>('getDeviceListByUser', {
+    return api.post<DeviceListByUserResponse>('getDeviceListByUser', {
         "appkey":constants.APP_KEY,
         "token":token,
         "curPage":"1",

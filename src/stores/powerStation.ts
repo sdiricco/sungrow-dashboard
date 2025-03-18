@@ -7,15 +7,10 @@ import { useAuthStore } from "./auth";
 export const usePowerStationStore = defineStore("power-station", () => {
   //Getters from other stores
   const getToken = computed(() => useAuthStore().token);
-
   const powerStationResponse = ref<PowerStationResponse | null>(null);
-
   const powerStationSelected = ref<PowerStation | null>(null);
-
   const powerStationDetail = ref<any>(null);
-
   const deviceTypeResponse = ref<any>(null);
-
   const deviceListResponse = ref<any>(null);
 
   const loading = ref<{
@@ -63,7 +58,7 @@ export const usePowerStationStore = defineStore("power-station", () => {
    *
    * @throws {Error} If the token is not found in the store.
    */
-  async function getPowerStationDetail() {
+  async function getPowerStationDetail(sn:string) {
     try {
       const token = getToken.value;
       if (token === null) {
@@ -72,7 +67,7 @@ export const usePowerStationStore = defineStore("power-station", () => {
       if(!powerStationSelected.value){
         throw new Error("Power station not selected");
       }
-      const r = await api.getPowerStationDetail(token, "");
+      const r = await api.getPowerStationDetail(token, sn);
       powerStationDetail.value = r.data;
     } catch (error) {
       console.error(error);

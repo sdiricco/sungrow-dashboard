@@ -100,3 +100,33 @@ export type PowerStation = {
   };
   fault_count: number;
 };
+
+export type DeviceListByUserResponse = {
+  req_serial_num: string | number;
+  result_code: string | number;
+  result_msg: string;
+  result_data: {
+    pageList: Device[];
+    rowCount: string | number;
+  };
+};
+
+export type Device = {
+  chnnl_id: number | string;
+  type_name: string;
+  ps_key: string | number;
+  device_sn: string | number;
+  dev_status: string | number;
+  device_type: string | number;
+  factory_name: string;
+  uuid: string | number;
+  grid_connection_date: string | number | null;
+  device_name: string | null;
+  dev_fault_status: string | null;
+  rel_state: string | number;
+  device_code: string | number;
+  ps_id: string | number;
+  device_model_id:  string | number;
+  communication_dev_sn: string | number | null;
+  device_model_code: string | number | null;
+}

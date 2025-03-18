@@ -94,11 +94,11 @@
 
               <p class="text-sm text-gray-600">
                 Ultimo aggiornamento potenza corrente:
-                {{ powerStation.curr_power_update_time }}
+                {{ formatDate(powerStation.curr_power_update_time) }}
               </p>
               <p class="text-sm text-gray-600">
                 Ultimo aggiornamento riduzione CO2:
-                {{ powerStation.co2_reduce_total_update_time }}
+                {{ formatDate(powerStation.co2_reduce_total_update_time) }}
               </p>
 
               <!-- Bottone CTA -->
@@ -125,9 +125,10 @@ import { useAuthStore } from "@/stores/auth";
 import { usePowerStationStore } from "@/stores/powerStation";
 import { storeToRefs } from "pinia";
 import Map from "@/components/Map.vue";
-import { computed, onMounted, ref } from "vue";
+import { computed, onMounted, } from "vue";
 import { Icon } from "@iconify/vue";
 import type { PowerStation } from "@/api/interfaces";
+import { formatDate } from "@/utils";
 
 const router = useRouter();
 
@@ -135,22 +136,19 @@ const logout = () => {
   router.push("/login");
 };
 
-const { loginResponse } = storeToRefs(useAuthStore());
+const { } = storeToRefs(useAuthStore());
 const {
   powerStationResponse,
-  deviceTypeResponse,
-  powerStationDetail,
   powerStationSelected,
   loading,
 } = storeToRefs(usePowerStationStore());
-const { getPowerStationList, getPowerStationDetail } = usePowerStationStore();
-const { login } = useAuthStore();
+const { getPowerStationList, } = usePowerStationStore();
+const { } = useAuthStore();
 
 const powerStationList = computed(
   () => powerStationResponse.value?.result_data.pageList || []
 );
 
-const sn = ref<string>("");
 
 function setPowerStation(ps:PowerStation) {
   powerStationSelected.value = ps;
