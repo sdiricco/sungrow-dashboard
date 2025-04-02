@@ -10,8 +10,8 @@ export const usePowerStationStore = defineStore("power-station", () => {
   const powerStationResponse = ref<PowerStationResponse | null>(null);
   const powerStationSelected = ref<PowerStation | null>(null);
   const powerStationDetail = ref<any>(null);
-  const deviceTypeResponse = ref<any>(null);
   const deviceListResponse = ref<any>(null);
+  const realTimeData = ref<any>(null);
 
   const loading = ref<{
     getPowerStationList: boolean,
@@ -97,7 +97,75 @@ export const usePowerStationStore = defineStore("power-station", () => {
     }
   }
 
-  return {powerStationResponse, loading, deviceTypeResponse, deviceListResponse, powerStationDetail, powerStationSelected, getDeviceListByUser, getPowerStationList, getPowerStationDetail };
+  async function getDeviceList(ps_id:string){
+    try {
+      const token = getToken.value;
+      if (token === null) {
+        throw new Error("Token not found");
+      }
+      const r = await api.getDeviceList(token, ps_id);
+      deviceListResponse.value = r.data;
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  async function getRealTimeData(){
+    try {
+      const token = getToken.value;
+      if (token === null) {
+        throw new Error("Token not found");
+      }
+      // const r = await api.gerDeviceRealTimeData(token, {
+      //   device_type:22,
+      //   point_id_list: ["10555",
+      //     "10557",
+      //     "10559", 
+      //     "10561", 
+      //     "10575", 
+      //     "10576", 
+      //     "10577", 
+      //     "10026", 
+      //     "10046",
+      //     "10567", 
+      //     "10569", 
+      //     "10571",
+      //     "10573",
+      //     "10587", 
+      //     "10510", 
+      //     "10511", 
+      //     "10028"
+      //   ],
+      //   ps_key_list: ["5685730_22_247_1"],
+      //   sn_list: []
+      // });
+
+      const r = await api.gerDeviceRealTimeData(token, {
+        device_type:7,
+        point_id_list: [
+        ],
+        ps_key_list: [],
+        sn_list: ["A2411703155"]
+      });
+      realTimeData.value = r.data;
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  async function getPVInverterRealTimeData(){
+    const token = getToken.value;
+    if (token === null) {
+      throw new Error("Token not found");
+    }
+    const r = await api.getPVInverterRealTimeData(token, {
+      ps_key_list: ["5685730_14_1_1"],
+      sn_list: []
+    });
+    realTimeData.value = r.data;
+  }
+
+  return {powerStationResponse, loading, deviceListResponse,  powerStationDetail, realTimeData, powerStationSelected, getDeviceList, getPVInverterRealTimeData, getRealTimeData, getDeviceListByUser, getPowerStationList, getPowerStationDetail };
 
 
 });

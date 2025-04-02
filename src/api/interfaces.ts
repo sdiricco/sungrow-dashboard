@@ -1,9 +1,43 @@
+/************************************************************************/
+/************************************************************************/
+/* Api Response */
+/************************************************************************/
+/************************************************************************/
+
 export type LoginResponse = {
   req_serial_num: string;
   result_code: string;
   result_msg: string;
   result_data: LoginResultData;
 };
+
+export type PowerStationResponse = {
+  req_serial_num: string;
+  result_code: string;
+  result_msg: string;
+  result_data: PowerStationResultData;
+};
+
+
+export type DeviceListByUserResponse = {
+  req_serial_num: string | number;
+  result_code: string | number;
+  result_msg: string;
+  result_data: DeviceListByUserResultData
+};
+
+export interface PowerStationDetailsResponse {
+  req_serial_num: string;
+  result_code: string | number;
+  result_msg: string;
+  result_data: PowerStationDetailsResultData;
+}
+
+/************************************************************************/
+/************************************************************************/
+/* Interface details */
+/************************************************************************/
+/************************************************************************/
 
 export type LoginResultData = {
   user_master_org_id: string;
@@ -22,17 +56,16 @@ export type LoginResultData = {
   country_id: string;
 };
 
-export type PowerStationResponse = {
-  req_serial_num: string;
-  result_code: string;
-  result_msg: string;
-  result_data: PowerStationResultData;
-};
+export type DeviceListByUserResultData = {
+  pageList: Device[];
+  rowCount: string | number;
+}
 
 export type PowerStationResultData = {
   pageList: PowerStation[];
   rowCount: number;
 };
+
 
 export type PowerStation = {
   total_energy: {
@@ -101,16 +134,6 @@ export type PowerStation = {
   fault_count: number;
 };
 
-export type DeviceListByUserResponse = {
-  req_serial_num: string | number;
-  result_code: string | number;
-  result_msg: string;
-  result_data: {
-    pageList: Device[];
-    rowCount: string | number;
-  };
-};
-
 export type Device = {
   chnnl_id: number | string;
   type_name: string;
@@ -129,4 +152,32 @@ export type Device = {
   device_model_id:  string | number;
   communication_dev_sn: string | number | null;
   device_model_code: string | number | null;
+}
+export interface PowerStationDetailsResultData {
+  design_capacity: number;
+  alarm_count: number;
+  ps_key: string;
+  latitude: number;
+  description: string | null;
+  ps_price_kwh: string | number;
+  ps_fault_status: number;
+  ps_type_name: string;
+  build_status: number;
+  install_date: string;
+  ps_type: number;
+  email: string | null;
+  longitude: number;
+  param_income_unit_name: string;
+  ps_price: string | number;
+  ps_name: string;
+  share_user_type: string | null;
+  ps_location: string;
+  share_type: string | number;
+  ps_current_time_zone: string;
+  user_moble_tel: string;
+  ps_id: number;
+  communication_dev_detail_list: {is_enable: number; sn: string}[];
+  connect_type: number;
+  ps_status: number;
+  fault_count: number;
 }

@@ -14,6 +14,9 @@
       </div>
     </template>
     <template #content>
+      <div class="p-4">
+        <h2 class="text-2xl font-bold">Devices</h2>
+      </div>
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 p-4">
         <div
           v-for="(device, idx) in devices"
@@ -26,7 +29,10 @@
 
           <div class="text-gray-600 text-sm space-y-1 mb-4">
             <p>
-              <span class="font-semibold">Type:</span> {{ device.type_name }}
+              <span class="font-semibold">Type:</span> {{ `${device.type_name} (${device.device_type})` }}
+            </p>
+            <p>
+              <span class="font-semibold">PS KEY:</span> {{ `${device.ps_key}` }}
             </p>
             <p>
               <span class="font-semibold">Device SN:</span>
@@ -68,6 +74,12 @@
           {{ powerStationDetail }}
         </pre>
       </div>
+      <div class="p-4">
+        <h2 class="text-2xl font-bold">Real time data</h2>
+        <pre>
+          {{ realTimeData }}
+        </pre>
+      </div>
     </template>
   </HCFLayout>
 </template>
@@ -79,15 +91,19 @@ import { usePowerStationStore } from "@/stores/powerStation";
 import { storeToRefs } from "pinia";
 import { computed, onMounted } from "vue";
 import { formatDate } from "@/utils";
+import { useRoute } from "vue-router";
 
 const router = useRouter();
+
+const route = useRoute()
+const ps_id = route.params.id as string
 
 const logout = () => {
   router.push("/login");
 };
 
-const { deviceListResponse, powerStationDetail } = storeToRefs(usePowerStationStore());
-const { getDeviceListByUser, getPowerStationDetail } = usePowerStationStore();
+const { deviceListResponse, powerStationDetail, realTimeData } = storeToRefs(usePowerStationStore());
+const { getDeviceList, getPowerStationDetail, getRealTimeData, getPVInverterRealTimeData } = usePowerStationStore();
 const devices = computed(() => deviceListResponse.value?.result_data.pageList);
 
 function onClickDetails(sn:string){
@@ -95,6 +111,7 @@ function onClickDetails(sn:string){
 }
 
 onMounted(() => {
-  getDeviceListByUser();
+  getDeviceList(ps_id);
+  getPVInverterRealTimeData();
 });
 </script>
